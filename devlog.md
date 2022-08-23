@@ -186,3 +186,116 @@ pnpm i @vitejs/plugin-vue-jsx@"2.0.0" -D
 
 3. package.json中添加build命令，打包库文件
 4. 引入在demo文件中进行测试
+
+### CSS样式：用UnoCSS实现原子化css
+
+> 给组件库添加样式系统，让组件库拥有一套统一风格的样式
+
+##### 「Atomic/Utility-First CSS」与「Semantic CSS 」的选择
+
+- 每个组件库有一套样式系统，确保样式风格统一，ElementUI遵循「Semantic CSS 」(语义化CSS)
+- 组件库通常需要搭建一个CSS子工程，用于实现类型系统 Element基于Sass + Gulp搭建
+- 原子样式出现后，无需搭建样式系统也能完成类似效果
+
+##### AtomicCss
+
+原子样式，代表作TailwindCSS，所提供的样式系统，很好的降低了UI库的开发难度
+
+##### UnoCSS实现AtomicCSS
+
+- [TailWind](https://tailwindcss.com/docs/installation) /ˈteɪlwɪnd/虽然好，缺点性能不足，会生成大量样式定义，全量CSS文件往往体积很大，导致页面性能下降
+- [UnoCSS](https://github.com/unocss/unocss) 拥有高性能且具灵活性的即时原子化CSS引擎，兼顾产物体积和开发性功能
+  
+##### 引入UnoCSS
+
+1. 引入UnoCSS
+
+   ```kotlin
+   pnpm i -D unocss@"0.45.6"
+   pnpm i -D @iconify-json/ic@"1.1.4"
+   ```
+
+2. vite.config.ts添加插件
+
+   ```ts
+    import { presetUno, presetAttributify, presetIcons } from "unocss";
+    import Unocss from "unocss/vite";
+    export default defineConfig({
+      plugins: [
+        ...
+        // 添加UnoCSS插件
+        Unocss({
+            presets: [presetUno(), presetAttributify(), presetIcons()],
+        })
+      ],
+    });
+   ```
+
+3. 使用以src/button/index.tsx为例
+4. 在index.ts中使用，注意createApp引入需要从`vue/dist/vue.esm-bundler.js`中引入，正常显示后说明UnoCSS正常引入
+
+##### 实现组件属性定制按钮样式
+
+- 根据color属性定制颜色
+  UnoCSS默认按需生成方式，也就是只生成代码中使用过的样式，如果在class中使用变量，无法分析变量的取值，也就无法动态生成样式<br />
+  解决问题：引入Safelist安全列表选项，把样式定义中变量的取值添加到Safelist中，Unocss就会根据Safelist生成样式<br />
+
+  步骤：
+  1. 创建config/unocss.ts，因为会大量设置Safelist，单独拆除unocss，最后引入vite配置中
+  2. 导出Unocss，并引入到vite中去
+
+##### Icon图标按钮实现
+
+UnoCSS引入图标，加载@unocss/preset-icons预设就可以，从[iconfy](https://icones.js.org/)引入<br />
+
+1. 在unocss.ts中增加presetIcons预设
+2. 需要将使用的图标名称添加到safelist中
+3. 在组件中使用
+
+### 组件使用文档
+
+#### 使用vitepress搭建组件文档
+
+##### 配置vitepress
+
+1. 安装
+
+   ```kotlin
+   pnpm i vitepress -D
+   ```
+
+2. 配置vite.config.js
+
+   不用配置vite.config.js即可使用，因为要支持jsx语法以及unoCss，则需要引入相应的插件
+
+   ```js
+    import { defineConfig } from "vite";
+    import vueJsx from "@vitejs/plugin-vue-jsx";
+    import Unocss from "../config/unocss";
+    // https://vitejs.dev/config/
+
+    export default defineConfig({
+      plugins: [
+        // 添加JSX插件
+        vueJsx(),
+        Unocss(),
+      ],
+    });
+   ```
+
+3. 创建index.md看效果
+4. 配置菜单
+   创建docs/.vitepress/config.ts，配置菜单
+5. 组件 Demo 展示
+   文档展示Demo，实际就是引入组件到markdown中。因为markdown可以直接运行html代码，viteperss含有vue实例，可以直接运行vue代码<br/>
+   问题：如何加载组件库
+   - 创建.vitepress/theme/index.ts，并在enhanceApp中注册组件
+   - markdown使用组件
+6. 引入Demo演示插件优化阅读体验
+   效果：同时展示代码和UI，如element等组件库使用markdown语法，使用开源项目模仿<br/>
+   - 安装插件`pnpm i vitepress-theme-demoblock -D`
+   - 配置vite.config.ts，添加插槽
+   - 在theme/idex中注册vitepress-theme-demoblock插件所需要的demo和demo-block组件
+   - 修改button/index.md文档，添加Demo插槽
+
+7.
