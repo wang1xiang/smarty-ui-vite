@@ -1,6 +1,6 @@
-#### vite搭建开发环境
+### vite搭建开发环境
 
-##### 包管理工具
+#### 包管理工具
 
 - pnpm优势
   
@@ -24,7 +24,7 @@
 
   3. 创建index.html用于测试
 
-##### 开发Vue组件
+#### 开发Vue组件
 
 - 安装vue3.0
 
@@ -67,7 +67,7 @@
      }
      ```
 
-##### JSX组件
+#### JSX组件
 
 想要支持JSX语法，就必须通过babel转义工具的支持
 
@@ -94,7 +94,7 @@ pnpm i @vitejs/plugin-vue-jsx@"2.0.0" -D
   }
   ```
 
-##### 库文件封装
+#### 库文件封装
 
 一般像Element这种组件库都支持两种方式引入组件
 
@@ -124,7 +124,7 @@ pnpm i @vitejs/plugin-vue-jsx@"2.0.0" -D
 1. 默认导出为Vue插件
 2. 每个组件可以单独导出
 
-###### 封装过程
+##### 封装过程
 
 1. 设计入口
    - 导出全部组件
@@ -298,4 +298,67 @@ UnoCSS引入图标，加载@unocss/preset-icons预设就可以，从[iconfy](htt
    - 在theme/idex中注册vitepress-theme-demoblock插件所需要的demo和demo-block组件
    - 修改button/index.md文档，添加Demo插槽
 
-7.
+### 单元测试
+
+单元测试覆盖率是评价软件成熟度的重要指标，如vue2的测试覆盖率coverage: 97%<br />
+
+#### 重要性
+
+- 保证并展示开发质量
+  想让项目更受欢迎，单元测试是必须的
+- 提高重构信心
+- 团队合作基石
+  开源项目配置CI脚本，当提交PR时自动运行单元测试确定代码是否有问题
+
+#### Jest
+
+> Facebook开发的测试框架，用于创建、运行和编写测试的javaScript库
+> 可以运行在任何javaScript项目中
+
+- 安装：全局安装即可
+
+  ```kotlin
+  pnpm i jest -g
+  ```
+
+- jest约定
+  1. 功能函数对应的测试函数放在tests目录中
+  2. 测试函数文件名为fun.spec.js
+
+- 编写测试用例
+  1. 创建/tests/add.spce.js
+  2. 建立describe测试分组，在第一个参数中填写测试内容
+  3. 编写测试代码test函数，每一个test函数是一个测试case：使用 expect（运行结果）.toBe（期望结果）的形式编写断言
+
+- 执行jest命令测试，jest自动运行tests下的所有用例
+  ![jest-test-error.jpg](./images/jest-test-error.jpg)
+
+##### Mock模拟无法执行的函数
+
+Mock 函数的作用，就是为了有效孤立函数，实现真正的单元测试。<br />
+
+被测试代码调用网络请求API，或者测试函数中包函数，这种问题如何处理？<br />
+
+单元测试是针对开发的最小单元进行测试，也就是函数，如果遇到函数A调用函数B时，应该直接模拟B函数返回结果，不测试B函数，如下面代码
+
+```js
+// fetch.js
+const axios = require('axios')
+exports.getData = () => axios.get('/abc/bcd')
+```
+
+不用管`axios.get`，只需要模拟一个axios.get返回相应的结果，使用jest.mock模拟
+
+##### 测试前端页面
+
+前端页面包含DOM模型，而Node中没有DOM模型，需要通过jsdom模拟一个dom对象
+
+1. 安装jsdom
+
+   ```kotlin
+   pnpm i jsdom -D
+
+   ```
+
+2. 编写jsdom-config.js
+3. 编写测试函数
