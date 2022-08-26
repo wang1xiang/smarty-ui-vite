@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-export default {
+export default    {
   name: "SFCButton",
 };
 </script>
