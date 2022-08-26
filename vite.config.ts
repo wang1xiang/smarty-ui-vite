@@ -25,14 +25,16 @@ export default defineConfig({
   // 添加库模式配置
   build: {
     rollupOptions,
-    minify: false,
+    minify: 'terser', // boolean | 'terser' | 'esbuild' 是否开启混淆 两个混淆工具  terser、esbuild
+    sourcemap: true, // 输出单独 source文件
+    brotliSize: true,  // 生成压缩大小报告
+    cssCodeSplit: true,
     lib: {
       entry: "./src/entry.ts",
       name: "SmartyUI",
-      fileName: "smarty-ui",
-      // 导出模块格式
+      fileName: "smarty-ui", // 输出文件名的前缀，和模块类型配合组成最终的文件名
       // @ts-ignore
-      formats: ["esm", "umd", "iife"],
+      formats: ["esm", "umd", "iife"], // 导出模块类型
     },
   },
   // vitest配置
