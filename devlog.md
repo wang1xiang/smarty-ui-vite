@@ -506,4 +506,42 @@ pnpm i terser@"5.4.0" -D
 
 通过yarn build进行打包
 
-测试IIFE
+测试IIFE代码 demo/iife/index.html
+
+### 持续集成CI
+
+开源项目使用第三方实现持续集成，例如Github Action、Travis CI、CircleCI
+
+#### Github Action
+
+集成服务，可以理解为远程运行的服务器，使用虚拟机配置容器使得一台服务器为不同用户提供独立的配置
+
+#### 创建workflow
+
+- .github/workflows Github Action配置文件
+- 每个文件对应一个工作流workflow
+- 一个workflow可以配置多个job\
+- job包含runs-on和steps
+- steps包含多个step，每个step串行执行，step可以使用三种方式：
+  - run： 执行 shell 命令行命令，如执行pnpm run dev，可以设置成  run: pnpm run dev
+  - env:  设置环境变量
+  - uses：运行第三方 [Action 脚本](https://github.com/marketplace?type=actions&query=actions)，Action脚本是Github提前写好的一些常用脚本
+  
+  文件结构如下：
+
+  ```yaml
+  name: CI # 最终展示在到Github Action 的执行界面
+  on:      # 触发器 何时运行这个工作流 如 Github 收到 push 代码时和 pull_request 请求时触发工作流
+    push:
+      branches: [ main ]
+    pull_request:
+      branches: [ main ]
+  jobs: # 任务
+    Lint: # Lint任务
+      runs-on: ubuntu-latest # 指定运行环境
+      # 步骤表示将作为作业的一部分执行的一系列任务
+      steps:
+    UnitTest:
+      # 单元测试任务
+  ```
+
