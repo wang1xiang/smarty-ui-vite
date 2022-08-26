@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "docs:dev": "vitepress dev docs --config ./docs/vite.config.js",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
@@ -19,10 +19,13 @@
     "@types/node": "^18.7.10",
     "@vitejs/plugin-vue": "^3.0.3",
     "@vitejs/plugin-vue-jsx": "^2.0.0",
+    "@vue/test-utils": "^2.0.2",
+    "happy-dom": "^6.0.4",
     "unocss": "0.45.6",
     "vite": "3.0.7",
     "vitepress": "1.0.0-alpha.9",
-    "vitepress-theme-demoblock": "^1.4.2"
+    "vitepress-theme-demoblock": "^1.4.2",
+    "vitest": "^0.22.1"
   },
   "dependencies": {
     "vue": "3.2.37"

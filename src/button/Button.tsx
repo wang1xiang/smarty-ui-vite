@@ -1,7 +1,7 @@
-import { defineComponent, PropType, toRefs } from "vue";
+import { defineComponent, PropType } from "vue";
 import "uno.css";
 
-export type ISize = 'small' | 'medium' | 'large'
+export type ISize = "small" | "medium" | "large";
 // 定义color
 export type IColor =
   | "black"
@@ -24,40 +24,40 @@ export const props = {
   },
   size: {
     type: String as PropType<ISize>,
-    default: 'medium'
+    default: "medium",
   },
   round: {
     type: Boolean,
-    default: false
+    default: false,
   },
   plain: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 } as const;
 export default defineComponent({
   name: "SButton",
   props,
   setup(props, { slots }) {
     console.log(`html`, document.querySelector(`#app`)?.innerHTML);
-    
+
     const size = {
       small: {
-        x: '2',
-        y: '1',
-        text: 'sm'
+        x: "2",
+        y: "1",
+        text: "sm",
       },
       medium: {
-        x: '3',
-        y: '1.5',
-        text: 'base'
+        x: "3",
+        y: "1.5",
+        text: "base",
       },
       large: {
-        x: '4',
-        y: '2',
-        text: 'lg'
-      }
-    }
+        x: "4",
+        y: "2",
+        text: "lg",
+      },
+    };
 
     return () => (
       <button

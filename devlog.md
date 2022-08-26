@@ -298,4 +298,80 @@ UnoCSS引入图标，加载@unocss/preset-icons预设就可以，从[iconfy](htt
    - 在theme/idex中注册vitepress-theme-demoblock插件所需要的demo和demo-block组件
    - 修改button/index.md文档，添加Demo插槽
 
-7.
+#### Jest
+
+> Facebook开发的测试框架，用于创建、运行和编写测试的javaScript库
+> 可以运行在任何javaScript项目中
+> 集成断言库、mock、快照测试、覆盖率报告
+> Vue3.0及ElementUI都是jest完成的单元测试
+
+- 安装：全局安装即可
+
+  ```kotlin
+  pnpm i jest -g
+  ```
+
+- jest约定
+  1. 功能函数对应的测试函数放在tests目录中
+  2. 测试函数文件名为fun.spec.js
+
+- 编写测试用例
+  1. 创建/tests/add.spce.js
+  2. 建立describe测试分组，在第一个参数中填写测试内容
+  3. 编写测试代码test函数，每一个test函数是一个测试case：使用 expect（运行结果）.toBe（期望结果）的形式编写断言
+
+- 执行jest命令测试，jest自动运行tests下的所有用例
+  ![jest-test-error.jpg](./images/jest-test-error.jpg)
+
+##### Mock模拟无法执行的函数
+
+Mock 函数的作用，就是为了有效孤立函数，实现真正的单元测试。<br />
+
+被测试代码调用网络请求API，或者测试函数中包函数，这种问题如何处理？<br />
+
+单元测试是针对开发的最小单元进行测试，也就是函数，如果遇到函数A调用函数B时，应该直接模拟B函数返回结果，不测试B函数，如下面代码
+
+```js
+// fetch.js
+const axios = require('axios')
+exports.getData = () => axios.get('/abc/bcd')
+```
+
+不用管`axios.get`，只需要模拟一个axios.get返回相应的结果，使用jest.mock模拟
+
+##### 测试前端页面
+
+前端页面包含DOM模型，而Node中没有DOM模型，需要通过jsdom模拟一个dom对象
+
+1. 安装jsdom
+
+   ```kotlin
+   pnpm i jsdom -D
+
+   ```
+
+2. 编写jsdom-config.js
+3. 编写测试函数
+
+### 搭建Vitest单元测试环境
+
+- Vitest基于vite，与vite通用配置；如果在vite中配置插件支持JSX语法，单元测试时就无需在配置一遍
+- Vitest兼容大部分jest使用方法
+- vitest注重性能，尽可能多的使用Worker线程并发执行
+
+- 安装
+
+  ```kotlin
+  pnpm i -D vitest happy-dom @vue/test-utils
+  ```
+
+  - vitest：测试框架，用于执行整个测试过程并提供断言库、mock、覆盖率报告
+  - happy-dom：用于提供Node环境中的Dom仿真模型
+  - @vue/test-utils工具库：Vue推荐的测试工具库
+
+- vite.config.ts配置Vitest配置
+  
+  - enviroment配置happy-dom，用于测试所需要的DOM对象的仿真
+  - transformMode，TSX、JSX转换处理
+
+- 修改package.json文件添加test脚本
