@@ -444,3 +444,66 @@ git本身有钩子，但设置较复杂，一般使用husky来简化配置
 ```bash
 pnpm i husky -D
 ```
+
+### 软件包封装
+
+#### 考虑支持哪些模块规范
+
+成熟的类库都支持cjs、esm、umd等多种模式
+
+- ESM：常见的前端开发标配
+- CJS：CommonJS标准的模块化
+- IIFE：适用于逻辑简单、无需搭建工程化环境的前端应用
+
+#### 考虑代码压缩和混淆问题
+
+- 代码压缩：去除代码中的空格、制表符、换行符等内容，将代码压缩到一行或多行，提高网站加载速度
+- 代码混淆：功能等价，但难以阅读和理解，目的是增加反向工程的难度，同时可以相对减少代码的体积
+
+#### sourceMap配置
+
+json文件，维护打包前后代码的映射关系，如果需要调试的话需要配置sourceMap
+
+### vite配置
+
+```ts
+/**
+ * vite构建通过rollup完成 
+ * rollup的配置通过rollupOptions传递
+ * external： 将该模块保留在 bundle 之外，代码中使用第三方库vue，但不想让vue出现在打包结果中
+ * output： 用于 umd/iffe 包中，意思是全局中的某个模块在组件库中叫什么名字
+ */
+const rollupOptions = {
+  external: ["vue"],
+  output: {
+    globals: {
+      vue: "Vue",
+    },
+  },
+};
+export default defineConfig({
+ build: {
+    rollupOptions,
+    minify: 'terser', // boolean | 'terser' | 'esbuild' 是否开启混淆 两个混淆工具  terser、esbuild
+    sourcemap: true, // 输出单独 source文件
+    brotliSize: true,  // 生成压缩大小报告
+    cssCodeSplit: true,
+    lib: {
+      entry: "./src/entry.ts",
+      name: "SmartyUI", //  生成包的名字，在 iife/umd 包，同一页上的其他脚本可以访问它
+      fileName: "smarty-ui", // 输出文件名的前缀，和模块类型配合组成最终的文件名
+      formats: ["esm", "umd", "iife"], // 导出模块类型
+    },
+  },
+});
+```
+
+如果使用terser，则需要安装terser
+
+```bash
+pnpm i terser@"5.4.0" -D
+```
+
+通过yarn build进行打包
+
+测试IIFE
