@@ -37,5 +37,6 @@ createApp({
     <SButton color="red" round plain icon="delete"></SButton>
   </div>
   `,
-}).use(SmartyUI)
-.mount("#app");
+})
+  .use(SmartyUI)
+  .mount("#app");

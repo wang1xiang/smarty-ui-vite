@@ -375,3 +375,72 @@ exports.getData = () => axios.get('/abc/bcd')
   - transformMode，TSX、JSX转换处理
 
 - 修改package.json文件添加test脚本
+
+- 编写测试用例
+  在src/button/test下添加Button.test.ts
+  
+### Eslint + Prettier + Husky
+
+#### 编码规范
+
+#### 目录规范
+
+```bash
+.
+├── config               # 配置文件
+├── coverage            # 覆盖率报告
+├── demo                # 代码范例
+├── docs                # 文档
+├── node_modules  
+├── scripts              # 脚本 发布、提交信息检查
+├── src                  # 组件代码
+└── types                # TS类型定义
+```
+
+#### 文件命名规范
+
+```bash
+├── src                 # 组件代码
+    └── button       # 组件包名
+         ├── index.ts   # 组件入口
+         ├── Button.tsx  # 组件代码  
+         └── __tests__   # 测试用例
+                  └── Button.spec.ts   
+```
+
+- 包名：小写 + 中划线
+- 统一入口文件： index.ts
+- 组件代码： 大驼峰
+- 测试用例代码 ： 测试对象名+ .spec.ts
+
+#### Eslint + Prettier代码检查工具
+
+- eslint专注代码语法检查，prettier专注代码格式调整
+
+  ```bash
+    pnpm i eslint -D
+    # ESLint 专门解析 TypeScript 的解析器
+    pnpm i @typescript-eslint/parser -D
+    # 内置各种解析 TypeScript rules 插件
+    pnpm i @typescript-eslint/eslint-plugin -D
+
+    pnpm i eslint-formatter-pretty -D
+    pnpm i eslint-plugin-json -D
+    pnpm i eslint-plugin-prettier -D
+    pnpm i eslint-plugin-vue -D
+    pnpm i @vue/eslint-config-prettier -D
+    pnpm i babel-eslint -D
+    pnpm i prettier -D
+    ```
+
+- 创建.tslintrc.cjs添加配置文件
+- 添加.eslintignore忽略文件
+- package.json配置检查脚本
+
+#### Husky + git hooks 自动化提交验证
+
+git本身有钩子，但设置较复杂，一般使用husky来简化配置
+
+```bash
+pnpm i husky -D
+```
