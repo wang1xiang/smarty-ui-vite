@@ -41,7 +41,6 @@ const safelist = [
     "share",
   ].map((v) => `i-ic-baseline-${v}`),
 ]
-console.log(safelist)
 export default () => 
   Unocss({
     safelist,
