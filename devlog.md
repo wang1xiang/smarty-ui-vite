@@ -577,3 +577,90 @@ pnpm i terser@"5.4.0" -D
 - 输入文件名 LICENSE ，github自动判断出要添加开源协议，会显示CHoose a license template按钮，点击选择需要的模板即可
 - 填入有效期 2022 - present和作者全名
 - 点击Review and Submit 就可以创建自己的许可证了
+  
+### 建立语义化版本
+
+软件从不成熟到成熟的过程，软件版本不能只是简单的自动递增，如以下几个问题：
+
+1. 哪些是稳定的正式版本
+2. 哪些是测试版本，以及测试版本的完善程度如何
+3. 哪些版本之间API出现了不兼容的现象
+4. 哪些版本只是修复bug、可以稳定升级
+
+语义化版本格式：主版本号.次版本号.修订号(MAJOR.MINOR.PATCH)，递增规则如下：
+
+- 主版本号：当做了不兼容的API修改
+- 次版本号：当做了向下兼容的功能性新增
+- 修订号：当做了向下兼容的问题修正
+
+以Vue为例：
+
+- Vue 2.6.0
+- Vue 2.7.0 - 新增 Composition API；
+- Vue 2.7.1 - 修正 bug；
+- Vue 3.0.0 - alpha - 新版本 Vue 的第一个预览版、与以前版本 API 不兼容；
+- Vue 3.0.0 - alpha.2 - 第二个预览版；
+- Vue 3.0.0 - beta - 测试版、也叫公开测试版；
+- Vue 3.0.3 - RC - Release Condidate 已经具备正式上线条件的版本，也叫做上线候选版；
+- Vue 3.0.0 - GA - General Availability 正式发布的版本；
+- Vue 3.0.1 - 修正 bug。
+
+### 推送tag
+
+1. 修改package.json中的version
+2. 设置git版本库标签
+
+   ```bash
+   # 创建版本号对应的 git tag
+   git tag 1.0.0
+   # 将新的 git tag 推送到 github 上面
+   git push --tag
+   ```
+
+3. 推送到远程仓库后，就可以在tag中看到软件的zip下载包
+
+### 提交npm仓库
+
+#### 手动提交
+
+1. 切换到npm仓库
+
+   ```bash
+   # 安装nrm直接切换
+   nrm use npm
+   ```
+
+2. 测试用户是否登陆正常
+
+   ```bash
+   npm whoami
+   ```
+
+3. 发布
+
+   ```bash
+   # 在package.json文件添加files可控制上传到npm的包
+   npm publish
+   ```
+
+#### 利用Action 实现自动发布
+
+首先，发布npm仓库不是每次提交push的时候
+
+- 添加分支 publish-xxx
+
+  ```bash
+  # 创建分支
+  git checkout -b publish-smarty-ui-vite
+  # 推动到远程
+  git push --set-upstream origin publish-smarty-ui-vite
+  ```
+
+- 当需要发布时，创建pull request到publish分支，当在github上merge时触发工作流
+- 创建ACtion工作流，[publish插件](https://github.com/primer/publish)
+- 提交npm仓库时需要认证
+  1. [创建token](https://www.npmjs.com/settings/wang1xiang/tokens/)，选择publish
+  2. 使用此token可随意操作自己 npm 库的授权，提交的时候需要用到。但是又不能放在 Action 代码中，因为代码是公开的，一旦公开了 Token，相当于任何人都可以操作你的 npm 库，解决的办法就是使用 Action Secret 功能。
+  3. [创建action secret](https://github.com/wang1xiang/smarty-ui-vite/settings/secrets/actions/new)，将第一步创建的token复制到value中，name随意。Action Secret 相当于建立了一个不公开的环境变量。只有项目的所有者可以设定，其他人则看不到
+- 创建.github/workflows/publish.yml
+- 在master分支提交代码，创建pull request
