@@ -545,3 +545,35 @@ pnpm i terser@"5.4.0" -D
       # 单元测试任务
   ```
 
+### 开发许可证
+
+#### 版权分类
+
+- Copyright - 受版权保护的；未经准许不得复制的。
+- Copyleft - 有限空间内的自由使用，不得用于商业目的，且不得闭源，衍生品仍需开源。
+- Permissive - 宽松自由软件许可协议，对软件的使用、修改、传播等方式采用最低限制的自由软件许可协议条款类型。
+- Create Commons - 大多是被用于设计类的工程上，署名权，非商业用途，禁止衍生。
+
+#### 前端项目开源协议
+
+一般都是MIT协议（属于Permissive），最简单的开源协议
+
+#### 选择开源协议
+
+- 需要简单宽松的协议： MIT 协议
+  代表项目： Vue 、React 、Element
+- 比较关心专利： Apache协议
+  代表项目： Apache、SVN
+- 比较关心项目的共享改进: GPL
+  代表项目： Linux 、Git
+- 非代码项目： CCreative Commons
+  署名： 必须提到作者
+  非商业用户
+  禁止演绎，禁止修改原作品在创作
+
+#### 在github上添加许可证
+
+- create new file
+- 输入文件名 LICENSE ，github自动判断出要添加开源协议，会显示CHoose a license template按钮，点击选择需要的模板即可
+- 填入有效期 2022 - present和作者全名
+- 点击Review and Submit 就可以创建自己的许可证了
