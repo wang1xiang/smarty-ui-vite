@@ -1,6 +1,6 @@
 {
-  "name": "smarty-ui-vite",
-  "version": "1.0.0",
+  "name": "test-ui-vite",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,9 @@
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\""
   },
   "keywords": [],
+  "files": [
+    "dist"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
